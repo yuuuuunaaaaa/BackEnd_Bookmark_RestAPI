@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 
 @Component
 @Order(1)
@@ -21,8 +22,10 @@ public class DatabaseRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         log.info("DataSource 구현객체는 = {} ", dataSource.getClass().getName());
         try (Connection connection = dataSource.getConnection()) {
-            log.info("DB URL = {}", connection.getMetaData().getURL());
-            log.info("DB Username = {}", connection.getMetaData().getUserName());
+            DatabaseMetaData metaData = connection.getMetaData();
+            log.info("DB Product = {}", metaData.getDatabaseProductName());
+            log.info("DB URL = {}", metaData.getURL());
+            log.info("DB Username = {}", metaData.getUserName());
         }
     }
 }
